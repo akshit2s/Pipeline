@@ -1,0 +1,186 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+
+public class ApplicationManager{
+    private List<Application> apps;
+ public ApplicationManager(){
+        apps=FileHandler.load();
+
+    }
+
+    public void addApplication(Application app){
+     apps.add(app);
+      FileHandler.save(apps);
+   }
+
+    public void viewApplication(){
+
+          if(apps.isEmpty()){
+        System.out.println("No applications found.");
+            return;}
+    for(int i = 0; i < apps.size(); i++){
+        Application app = apps.get(i);
+        System.out.println("Application #" + (i + 1));
+        System.out.println("Company: " + app.companyName);
+        System.out.println("Role: " + app.role);
+        System.out.println("Link: " + app.link);
+        System.out.println("Deadline: " + app.deadline);
+        System.out.println("Status: " + app.status);
+        if(!app.dateApplied.isEmpty()){
+        System.out.println("Applied On: " + app.dateApplied);}
+        if(!app.notes.isEmpty()){
+        System.out.println("Notes: " + app.notes);}
+        System.out.println();
+        System.out.println("--------------------");
+    }
+}
+
+    public void updateApplicationStatus(String companyName,String role, String status){
+        boolean found=false;
+    
+     for(Application app : apps){
+        if((app.companyName.equalsIgnoreCase(companyName))
+            && (app.role.equalsIgnoreCase(role))){
+         app.status = status;
+         found=true;
+         break;
+        }}
+    
+    
+    if (found){
+        FileHandler.save(apps);
+        System.out.println("Status Updated.");
+    }
+    else{
+        System.out.println("Record Not Found.");
+    }
+
+    }
+    public void checkDeadline(){
+        DateTimeFormatter formatter= DateTimeFormatter.ofPattern("d-M-yyyy");
+        LocalDate today=LocalDate.now();
+        for(Application app : apps){
+      String deadline=app.deadline;
+      LocalDate deadlinedate=LocalDate.parse(deadline,formatter);
+     long days_left=ChronoUnit.DAYS.between(today,deadlinedate );
+  if (days_left<=7){ 
+    if (days_left<0){
+        System.out.println(app.companyName+" | "+app.role+" |" +" ❌Already Ended ");
+    }
+    else if (days_left==0){
+System.out.println(app.companyName+" | "+app.role+" | " +" 🚨LAST DAY ");
+    }
+    else{
+   System.out.println(app.companyName+" | " +app.role+" | " + days_left +" days left.");}}
+    }
+}
+    public void updateNotes(String companyName,String role, String notes){
+        boolean found=false;
+        for(Application app: apps){
+            if((app.companyName.equalsIgnoreCase(companyName))
+                &&(app.role.equalsIgnoreCase(role))){
+                app.notes=notes;
+                found=true;
+                break;
+            }
+        }
+        if(found){
+            FileHandler.save(apps);
+            System.out.println("Notes Updated");
+        }
+        else{
+            System.out.println("Record Not Found.");
+        }
+    
+    }
+    public void deleteApplication(String companyName,String role){
+        Application appToDelete=null;
+        boolean found=false;
+        for (Application app: apps){
+            if((app.companyName.equalsIgnoreCase(companyName))
+            &&(app.role.equalsIgnoreCase(role))){
+        appToDelete=app;
+        found=true;
+        break;
+        }
+    }
+    if(found){
+    apps.remove(appToDelete);
+    FileHandler.save(apps);
+    System.out.println("Application Deleted Successfully");
+    }
+    else{
+        System.out.println("Application Not Found");
+
+    }
+}
+
+ public void editApplication(String companyName, String role, int choice, String newValue ){
+    boolean found=false;
+    for(Application app: apps){
+        if((app.companyName.equalsIgnoreCase(companyName))
+        &&(app.role.equalsIgnoreCase(role))){
+         switch(choice){
+    case 1:
+        app.companyName = newValue;
+        break;
+
+    case 2:
+        app.role = newValue;
+        break;
+
+    case 3:
+        app.link = newValue;
+        break;
+
+    case 4:
+        app.deadline = newValue;
+        break;
+
+    case 5:
+        app.status = newValue;
+        break;
+
+    case 6:
+        app.notes = newValue;
+        break;
+    
+    case 7:
+        app.dateApplied=newValue;
+        break;
+
+    default:
+         System.out.println("Invalid Choice");
+         found=false;
+         return;
+
+}
+    found=true;
+    break;
+
+        }
+    }
+    if(found){
+        FileHandler.save(apps);
+        System.out.println("Updated!");
+    }
+    else{
+        System.out.println(" \"Application not found. Check company name and role.");
+    }
+ }
+  public int getApplicationCount(){
+    return apps.size();
+}
+
+public Application findApplication(String companyName , String role ){
+    for(Application app: apps){
+         if(app.companyName.equalsIgnoreCase(companyName)
+           && app.role.equalsIgnoreCase(role)){
+
+            return app;
+    }}
+    return null;}
+}

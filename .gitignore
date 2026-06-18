@@ -1,3 +1,4 @@
-out/
-.vscode/
 *.class
+out/
+bin/
+data.txt
