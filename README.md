@@ -1,16 +1,66 @@
 # Internship Tracker
 
-A CLI-based internship application tracker built in Java.
+## Why I Built This
+
+While applying for internships, I realized that keeping track of multiple applications quickly becomes messy. Different companies have different deadlines, application statuses, interview stages, and notes to remember. Managing everything manually through screenshots, bookmarks, or spreadsheets felt inefficient and easy to lose track of.
+
+To solve this problem for myself, I built **Internship Tracker**, a Java-based console application that helps organize internship applications in one place. The goal was to create a simple system where I could track opportunities, monitor deadlines, update application progress, and store important notes without relying on external tools.
+
+Although the project started as a personal solution, it can be useful for any student applying to multiple internships and looking for a lightweight way to manage the process.
+
+---
 
 ## Features
-- Add and track internship applications
-- Deadline alerts and reminders
-- Resume notes per application
-- Status pipeline: Saved → Applied → Interview → Offer → Rejected
-- Data persistence via local file storage
 
-## Tech
-Java 21 | CLI | File I/O
+* Add internship applications
+* View all saved applications
+* Update application status
+* Track upcoming deadlines
+* Add and edit notes
+* Edit application details
+* Delete applications
+* Persistent file storage using text files
 
-## Status
-🚧 In Progress
+---
+
+## Tech Stack
+
+* Java
+* Object-Oriented Programming (OOP)
+* ArrayList
+* File Handling
+* LocalDate & DateTimeFormatter
+
+---
+
+## Project Structure
+
+* **Main.java** → Menu system and user interaction
+* **Application.java** → Represents an internship application
+* **ApplicationManager.java** → Handles application management logic
+* **FileHandler.java** → Saves and loads data from files
+
+---
+
+## What I Learned
+
+* Designing and working with custom classes
+* Managing collections using ArrayList
+* Reading and writing data using files
+* Working with dates and deadlines
+* Implementing CRUD operations
+* Structuring a multi-file Java project
+* Debugging runtime errors and edge cases
+
+---
+
+## Future Improvements (Version 2)
+
+* Deadline notifications and reminders
+* Save all changes only when exiting the application
+* Sort applications by nearest deadline
+* Search applications by company or role
+* Filter applications by status
+* Better input validation
+* Dashboard with application statistics
+* Improved editing workflow and user experience
