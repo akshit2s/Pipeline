@@ -18,6 +18,8 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         ApplicationManager manager = new ApplicationManager();
         boolean running = true;
+        manager.showDeadlineNotifications();
+
         while (running){
             displayMenu();
             System.out.print("Enter the operation(1-8): ");

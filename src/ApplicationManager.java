@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+
 import java.util.List;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +17,7 @@ public class ApplicationManager{
    }
 
     public void viewApplication(){
-
+        sortDeadlines();
           if(apps.isEmpty()){
         System.out.println("No applications found.");
             return;}
@@ -60,23 +60,21 @@ public class ApplicationManager{
 
     }
     public void checkDeadline(){
-        DateTimeFormatter formatter= DateTimeFormatter.ofPattern("d-M-yyyy");
-        LocalDate today=LocalDate.now();
-        for(Application app : apps){
-      String deadline=app.deadline;
-      LocalDate deadlinedate=LocalDate.parse(deadline,formatter);
-     long days_left=ChronoUnit.DAYS.between(today,deadlinedate );
+        sortDeadlines();
+        for (Application app: apps){
+      long days_left = getDaysLeft(app);
   if (days_left<=7){ 
-    if (days_left<0){
-        System.out.println(app.companyName+" | "+app.role+" |" +" ❌Already Ended ");
+
+    if(days_left<0){
+        continue;
     }
     else if (days_left==0){
 System.out.println(app.companyName+" | "+app.role+" | " +" 🚨LAST DAY ");
     }
     else{
    System.out.println(app.companyName+" | " +app.role+" | " + days_left +" days left.");}}
-    }
-}
+    }}
+
     public void updateNotes(String companyName,String role, String notes){
         boolean found=false;
         for(Application app: apps){
@@ -183,4 +181,47 @@ public Application findApplication(String companyName , String role ){
             return app;
     }}
     return null;}
+
+public void sortDeadlines(){
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-M-yyyy");
+
+    apps.sort((a,b) -> {
+        LocalDate dateA = LocalDate.parse(a.deadline,formatter);
+  LocalDate dateB =
+  LocalDate.parse(b.deadline, formatter);
+   return dateA.compareTo(dateB);
+    });
+
+    
+    }
+
+    public void showDeadlineNotifications(){
+        sortDeadlines();
+        for(Application app : apps){
+   long days_left= getDaysLeft(app);
+   if(app.status.equalsIgnoreCase("To Apply")){
+   if (days_left<=7){
+    if(days_left<0){
+        continue;
+    }
+System.out.println(
+    "⚠️ " + app.companyName +
+    " | " + app.role +
+    " | Deadline: " + app.deadline +
+    " | " + days_left + " days left"
+);
+   }}
+}
+     
+    }
+
+   public long getDaysLeft(Application app){
+  DateTimeFormatter formatter= DateTimeFormatter.ofPattern("d-M-yyyy");
+        LocalDate today=LocalDate.now();
+      
+      String deadline=app.deadline;
+      LocalDate deadlinedate=LocalDate.parse(deadline,formatter);
+     long days_left=ChronoUnit.DAYS.between(today,deadlinedate );
+     return days_left;
+   }
 }

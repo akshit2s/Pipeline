@@ -24,17 +24,31 @@ static List<Application> load(){
     try{
         BufferedReader reader= new BufferedReader(new FileReader(FILE_NAME));
         String line;
-    while((line=reader.readLine())!= null){
-        String[] parts=line.split(",",-1);
-        Application app=new Application(parts[0], parts[1], parts[2], parts[3], parts[4],parts[5]);
-        
-        app.notes=parts[6];
-       apps.add(app);
-       
+ while((line = reader.readLine()) != null){
+
+    String[] parts = line.split(",", -1);
+
+    if(parts.length < 7){
+        System.out.println("Skipping invalid record: " + line);
+        continue;
     }
+
+    Application app = new Application(
+        parts[0],
+        parts[1],
+        parts[2],
+        parts[3],
+        parts[4],
+        parts[5]
+    );
+
+    app.notes = parts[6];
+    apps.add(app);
+}
+    
     reader.close();}
     catch (IOException e){
-        System.out.println("Error accessing data: "+e.getMessage());
+        System.out.println("No existing data found. Starting with an empty tracker."+e.getMessage());
     }
     return apps;
     
