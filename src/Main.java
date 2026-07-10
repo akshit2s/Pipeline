@@ -1,3 +1,4 @@
+
 import java.util.Scanner;
 
 
@@ -12,7 +13,8 @@ public class Main {
        System.out.println("5. Add/Edit Resume Notes");
        System.out.println("6. Edit Application");
        System.out.println("7. Delete Application");
-       System.out.println("8. Exit");
+       System.out.println("8. Search Application");
+       System.out.println("9. Exit");
     }
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
@@ -22,7 +24,8 @@ public class Main {
 
         while (running){
             displayMenu();
-            System.out.print("Enter the operation(1-8): ");
+            System.out.println();
+            System.out.print("Enter the operation(1-9): ");
             int choice=Integer.parseInt(sc.nextLine());
        switch (choice) {
         case 1:{
@@ -211,7 +214,25 @@ switch(statusChoice){
         }
             
             break;
-        case 8:
+
+        case 8:{
+            System.out.println();
+            System.out.print("Search by companyName/Role: ");
+            String key=sc.nextLine();
+            int count1=manager.searchApplication(key);
+        if (count1!=0)  {  System.out.println();
+            System.out.print("Advanced Search companyName/Role: ");
+            String key2=sc.nextLine();
+            if(key2.equalsIgnoreCase("")){
+                manager.searchApplication(key);
+            }
+            else{
+            manager.searchApplicationAdv(key,key2,count1);}}
+        }
+               break;
+
+
+        case 9:
             System.out.println("Exiting.");
             sc.close();
             running=false;

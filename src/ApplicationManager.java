@@ -24,17 +24,7 @@ public class ApplicationManager{
     for(int i = 0; i < apps.size(); i++){
         Application app = apps.get(i);
         System.out.println("Application #" + (i + 1));
-        System.out.println("Company: " + app.companyName);
-        System.out.println("Role: " + app.role);
-        System.out.println("Link: " + app.link);
-        System.out.println("Deadline: " + app.deadline);
-        System.out.println("Status: " + app.status);
-        if(!app.dateApplied.isEmpty()){
-        System.out.println("Applied On: " + app.dateApplied);}
-        if(!app.notes.isEmpty()){
-        System.out.println("Notes: " + app.notes);}
-        System.out.println();
-        System.out.println("--------------------");
+       printApplication(app);
     }
 }
 
@@ -223,5 +213,56 @@ System.out.println(
       LocalDate deadlinedate=LocalDate.parse(deadline,formatter);
      long days_left=ChronoUnit.DAYS.between(today,deadlinedate );
      return days_left;
+   }
+
+   public int searchApplication(String keyword){
+   int count =0;
+    for (Application app : apps){
+    if (app.companyName.toLowerCase().contains(keyword.toLowerCase()) ||
+    app.role.toLowerCase().contains(keyword.toLowerCase())){
+          printApplication(app);
+        count++;
+        }
+    }
+    if (count==0) {
+    System.out.println("No matching applications found.");
+}
+System.out.println(count+" Application/s found");
+return count;
+   }
+   public void searchApplicationAdv(String keyword,String keyword2,int count){
+    keyword = keyword.toLowerCase();
+    keyword2 = keyword2.toLowerCase();
+    int count2=0;
+   
+    for (Application app : apps){
+      if ((app.companyName.toLowerCase().contains(keyword) ||
+     app.role.toLowerCase().contains(keyword)) &&
+    (app.companyName.toLowerCase().contains(keyword2) ||
+     app.role.toLowerCase().contains(keyword2))){
+          printApplication(app);
+          count2++;
+        
+    }}
+    
+      if (count2==0) {
+    System.out.println("No matching applications found.");
+}
+System.out.println(count2+" Application/s found");
+   }
+
+   private void printApplication(Application app){
+     System.out.println();
+            System.out.println("Company: " + app.companyName);
+        System.out.println("Role: " + app.role);
+        System.out.println("Link: " + app.link);
+        System.out.println("Deadline: " + app.deadline);
+        System.out.println("Status: " + app.status);
+        if(!app.dateApplied.isEmpty()){
+        System.out.println("Applied On: " + app.dateApplied);}
+        if(!app.notes.isEmpty()){
+        System.out.println("Notes: " + app.notes);}
+        System.out.println();
+        System.out.println("--------------------");
    }
 }
