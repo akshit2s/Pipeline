@@ -212,8 +212,10 @@ System.out.println(
       String deadline=app.deadline;
       LocalDate deadlinedate=LocalDate.parse(deadline,formatter);
      long days_left=ChronoUnit.DAYS.between(today,deadlinedate );
+     
      return days_left;
-   }
+    }
+   
 
    public int searchApplication(String keyword){
    int count =0;
@@ -265,4 +267,92 @@ System.out.println(count2+" Application/s found");
         System.out.println();
         System.out.println("--------------------");
    }
+
+  public void  filterApplications(String status){
+    boolean found = false;
+    for (Application app : apps){
+        if(app.status.contains(status)){
+         printApplication(app);
+         found=true;
+        }
+    }
+     if (!found) {
+        System.out.println("No applications found with status: " + status);
+    }
+   }
+   public void showDashboard(){
+   System.out.println("========================================");
+    System.out.println("      INTERNSHIP TRACKER     ");
+    System.out.println("========================================");
+    System.out.println();
+    System.out.println("------------ DASHBOARD ------------");
+    System.out.println();
+    System.out.println("Total Applications : " + apps.size());
+    System.out.println();
+    System.out.println("To Apply           : " +status_count("To Apply"));
+    System.out.println("Applied            : " +status_count("Applied"));
+    System.out.println("OA                 : " + status_count("OA"));
+    System.out.println("Interview          : " + status_count("Interview"));
+    System.out.println("Offer              : " + status_count("Offer"));
+    System.out.println("Rejected           : " +status_count("Rejected"));
+    System.out.println("No status added    : " +(apps.size()-(status_count("To Apply")+
+                                                                status_count("Applied")+
+                                                                status_count("OA")+
+                                                                status_count("Interview")+
+                                                                status_count("Offer")+
+                                                                status_count("Rejected"))));
+    System.out.println();
+    showNearestDeadlines();
+    System.out.println();
+   }
+
+   public int status_count(String status){
+    int count = 0;
+     for (Application app : apps){
+        if(app.status.contains(status)){
+            count++;
+        }
+     }
+     return count;
+   }
+
+public void showNearestDeadlines() {
+
+    if (apps.isEmpty()) {
+        System.out.println("No applications available.");
+        return;
+    }
+
+    sortDeadlines();
+
+    long nearestDays = -1;
+
+   
+    for (Application app : apps) {
+        long daysLeft = getDaysLeft(app);
+
+        if (daysLeft >= 0) {
+            nearestDays = daysLeft;
+            break;
+        }
+    }
+
+    // If all deadlines have passed
+    if (nearestDays == -1) {
+        System.out.println("No upcoming deadlines.");
+        return;
+    }
+
+    System.out.println("----------------------------------------");
+    System.out.println("Nearest Deadline(s)");
+    System.out.println("----------------------------------------");
+
+    // Print all applications having the same nearest deadline
+    for (Application app : apps) {
+
+        if (getDaysLeft(app) == nearestDays) {
+            System.out.println(app.companyName + " | " + app.role + " | " + nearestDays + " day(s) left");
+        }
+    }
+}
 }
