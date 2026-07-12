@@ -12,14 +12,14 @@ Although the project started as a personal solution, it can be useful for any st
 
 ## Features
 
-* Add internship applications
-* View all saved applications
-* Update application status
-* Track upcoming deadlines
-* Add and edit notes
-* Edit application details
-* Delete applications
-* Persistent file storage using text files
+- Add, Edit, Delete and View internship applications
+- Track application status
+- Deadline reminders and notifications
+- Dashboard with application statistics
+- Search by company and role
+- Advanced search refinement
+- Filter applications by status
+- Persistent storage using file handling
 
 ---
 
