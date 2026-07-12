@@ -355,4 +355,14 @@ public void showNearestDeadlines() {
         }
     }
 }
+public boolean applicationExists(String company, String role){
+    for (Application app: apps){
+        if(app.companyName.equalsIgnoreCase(company)&&(app.role.equalsIgnoreCase(role))){
+            System.out.println("Application exists!");
+            return true;
+
+        }
+    }
+    return false;
+}
 }

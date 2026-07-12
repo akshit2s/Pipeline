@@ -19,39 +19,29 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
         ApplicationManager manager = new ApplicationManager();
+       
         boolean running = true;
-        //manager.showDeadlineNotifications();
+        
         manager.showDashboard();
         while (running){
             displayMenu();
             System.out.println();
-            System.out.print("Enter the operation: ");
-            int choice=Integer.parseInt(sc.nextLine());
+       int choice = InputHelper.readInt(sc, "Enter choice[1-10]: ", 1, 10);
        switch (choice) {
         case 1:{
             
-           System.out.print("Company Name: ");
-            String company = sc.nextLine();
-            System.out.print("Role: ");
-            String role = sc.nextLine();
-            System.out.print("Application Link: ");
-            String link = sc.nextLine();
-            System.out.print("Deadline (DD-MM-YYYY): ");
-            String deadline = sc.nextLine();
-            deadline = deadline.trim();
-            System.out.println("Select Status:");
-            System.out.println("1. To Apply");
-            System.out.println("2. Applied");
-            System.out.println("3. OA");
-            System.out.println("4. Interview");
-            System.out.println("5. Offer");
-            System.out.println("6. Rejected");
-            System.out.print("Enter choice: ");
-
-            int statusChoice = Integer.parseInt(sc.nextLine());
-
-            String status = getStatusFromChoice(statusChoice);
-
+         String company = InputHelper.readNonEmptyString(sc, "Company: ");
+          String role = InputHelper.readNonEmptyString(sc, "Role: ");
+            company = company.trim();
+            role = role.trim();
+            if(manager.applicationExists(company, role)){
+              System.out.println("Application already exists");
+              break;
+            }
+           String link = InputHelper.readNonEmptyString(sc, "Link: ");
+          String deadline = InputHelper.readValidDate(sc, "Deadline (dd-MM-yyyy): ");
+            
+           String status = InputHelper.readStatus(sc);
             if (status == null) {
                 System.out.println("Invalid Status!");
                 break;      // or return depending on where this is
@@ -60,39 +50,25 @@ public class Main {
           
             String dateApplied = "";
             if(status.equalsIgnoreCase("Applied")){
-            System.out.print("Date Applied (DD-MM-YYYY): ");
-            dateApplied = sc.nextLine();}
+            dateApplied = InputHelper.readValidDate(sc, "DateApplied (dd-MM-yyyy): ");
+           }
             Application app = new Application(company, role, link, deadline, status,dateApplied);
             manager.addApplication(app);
             System.out.println(" Application Saved!");
             break;
-        }
+            }
         case 2:{
             manager.viewApplication();
             break;}
         case 3:
-           { System.out.print("Company Name: ");
-            String company = sc.nextLine();
-            System.out.print("Role: ");
-            String role = sc.nextLine();
-            System.out.println("1. To Apply\n"+ //
-            "2. Applied\n" + //
-            "3. OA\n" + //
-            "4. Interview\n" + //
-            "5. offer\n" + //
-            "6. Rejected\n" + //
-            "");
-            System.out.print("Enter Status Choice : ");
-
-            int statusChoice = Integer.parseInt(sc.nextLine());
-          String status = getStatusFromChoice(statusChoice);
-
+           {String company = InputHelper.readNonEmptyString(sc, "Company Name: ");
+            String role = InputHelper.readNonEmptyString(sc, "Role: ");
+            String status = InputHelper.readStatus(sc);
 
           if(!status.isEmpty()){
-            if(status.equalsIgnoreCase("applied")){
-              
-               System.out.print("Date Applied (DD-MM-YYYY): ");
-               String dateApplied = sc.nextLine();
+              if(status.equalsIgnoreCase("applied")){
+           String dateApplied =
+                 InputHelper.readValidDate(sc, "Date Applied (dd-MM-yyyy): ");
                manager.editApplication(company,role,7,dateApplied);
                
                
@@ -108,22 +84,17 @@ public class Main {
             
             break;
         case 5:{
-            System.out.print("Company Name: ");
-            String company = sc.nextLine();
-            System.out.print("Role: ");
-            String role = sc.nextLine();
-            System.out.print("Add/Edit Resume Notes: ");
-            String notes = sc.nextLine();
+            String company = InputHelper.readNonEmptyString(sc, "Company Name: ");
+            String role = InputHelper.readNonEmptyString(sc, "Role: ");
+            String notes = InputHelper.readNonEmptyString(sc, "Add/Edit Resume Notes: ");
 
             manager.updateNotes(company, role, notes);
             break;
         }
             
         case 6:{
-             System.out.print("Company Name: ");
-            String company = sc.nextLine();
-            System.out.print("Role: ");
-            String role = sc.nextLine();
+            String company = InputHelper.readNonEmptyString(sc, "Company Name: ");
+            String role = InputHelper.readNonEmptyString(sc, "Role: ");
             System.out.println("1. Company\n" + //
             "2. Role\n" + //
             "3. Link\n" + //
@@ -131,9 +102,8 @@ public class Main {
             "5. Status\n" + //
             "6. Notes\n"+//
             "7. Date Applied");
-            System.out.print("Field to Edit: ");
-            int fieldChoice = Integer.parseInt(sc.nextLine());
-            
+          int fieldChoice =
+InputHelper.readInt(sc,"Field to Edit: ",1,7);
             Application app = manager.findApplication(company, role);
             if(app == null){
                 System.out.println("Application Not Found.");
@@ -185,10 +155,8 @@ public class Main {
         }
             
         case 7:{
-            System.out.print("Company Name: ");
-            String company = sc.nextLine();
-            System.out.print("Role: ");
-            String role = sc.nextLine();
+         String company = InputHelper.readNonEmptyString(sc, "Company Name: ");
+         String role = InputHelper.readNonEmptyString(sc, "Role: ");
             company = company.trim();
             role = role.trim();
             manager.deleteApplication(company, role);
@@ -198,8 +166,7 @@ public class Main {
 
         case 8:{
             System.out.println();
-            System.out.print("Search by companyName/Role: ");
-            String key=sc.nextLine();
+          String key = InputHelper.readNonEmptyString(sc,"Search by Company/Role: ");
             int count1=manager.searchApplication(key);
         if (count1!=0)  {  System.out.println();
             System.out.print("Advanced Search companyName/Role: ");
@@ -225,8 +192,7 @@ public class Main {
                 System.out.println("7. Offer");
                 System.out.println("8. Back");
                 System.out.print("Enter choice(1-8): ");
-
-                int filter_choice = Integer.parseInt(sc.nextLine());
+        int filter_choice =InputHelper.readInt(sc,"Enter choice (1-8): ",1,8);
 
                    switch (filter_choice) {
         case 1:
@@ -252,8 +218,7 @@ public class Main {
             break;
         case 8:
             break;
-        default:
-            System.out.println("Invalid choice!");
+      
     }
         }
         break;
@@ -270,30 +235,5 @@ public class Main {
        }
     }
 }
+}
 
-private static String getStatusFromChoice(int choice) {
-
-    switch (choice) {
-        case 1:
-            return "To Apply";
-
-        case 2:
-            return "Applied";
-
-        case 3:
-            return "OA";
-
-        case 4:
-            return "Interview";
-
-        case 5:
-            return "Offer";
-
-        case 6:
-            return "Rejected";
-
-        default:
-            return null;
-    }
-
-}}
